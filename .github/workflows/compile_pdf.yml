@@ -1,0 +1,22 @@
+name: Compile report.tex
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Compile LaTeX document
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: report.tex
+          compiler: lualatex
+          args: -interaction=nonstopmode -shell-escape
+      - name: Upload art
+        uses: actions/upload-artifact@v2
+        with:
+          name: PDF report
+          path: report.pdf
+          if-no-files-found: error

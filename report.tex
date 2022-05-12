@@ -1,0 +1,99 @@
+%! TeX program = lualatex
+\documentclass[12pt,twoside]{report}
+\usepackage[a4paper,left=20mm,right=20mm,top=25mm,bottom=25mm,headheight=15pt]{geometry}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\graphicspath{ {images/} }
+
+
+% Font
+\usepackage{titlesec}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX} 
+\setsansfont{Lato}[
+	Path = fonts/Lato/,
+	Extension = .otf,
+	UprightFont = *-Regular,
+	BoldFont = *-Bold,
+	ItalicFont = *-Italic,
+	BoldItalicFont = *-BoldItalic,
+]
+\setmonofont{SourceCodePro}[
+	Path = fonts/SourceCodePro/,
+	Extension = .otf,
+	UprightFont = *-Regular,
+	BoldFont = *-Bold,
+	ItalicFont = *-Italic,
+	BoldItalicFont = *-BoldItalic,
+]
+\setmainfont{Newsreader}[
+	Path = fonts/Newsreader/,
+	Extension = .otf,
+	UprightFont = *-Regular,
+	BoldFont = *-Bold,
+	ItalicFont = *-Italic,
+	BoldItalicFont = *-BoldItalic,
+]
+
+\titleformat{\chapter} % type of title to format
+    [display] % shape
+    {\sffamily\Huge\bfseries\raggedleft} % how to format it
+    {\thechapter} % label
+    {0pt} % seperator between label and the chapter name below it.
+    {\titlerule\vspace{2pt}\titlerule[1pt]\vspace{5pt}}
+
+\titleformat{\section}
+    {\sffamily\Large\bfseries}
+    {\thesection}
+    {1em}
+    {}
+\titleformat{\subsection}
+    {\sffamily\large\bfseries}
+    {\thesubsection}
+    {1em}
+    {}
+\titleformat{\subsubsection}
+    {\sffamily\normalsize\bfseries}
+    {\thesubsubsection}
+    {1em}
+    {}
+
+% code
+\usepackage{minted}
+\setminted{fontsize=\small}
+\usemintedstyle{solarized-light}
+
+% Set headers
+\usepackage{fancyhdr}
+\fancypagestyle{custom}{
+	\fancyhf{}
+	\fancyhead[RE]{\sffamily{\thepage}}
+	\fancyhead[LO]{\sffamily{\thepage}}
+	\fancyhead[LE]{\sffamily{\rightmark}}
+	\fancyhead[RO]{\sffamily{\leftmark}}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}
+}
+\pagestyle{custom}
+% Override Chapter pages where the report document class sets \thispagestyle{plain}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[C]{\sffamily{\thepage}}
+}
+
+\pagenumbering{arabic}
+
+\begin{document}
+    \input{chapters/titlepage.tex}
+    \newpage
+    
+    \input{chapters/table_of_contents}
+    \newpage
+    
+    \chapter{Part One}
+    \input{chapters/part_one.tex}
+
+    \appendix
+    \chapter{Appendix}
+    \input{chapters/appendix.tex}
+\end{document}
