@@ -1,50 +1,31 @@
-# Basic LaTeX template
-*Inspired by the style of the book [The Go Programming
-Language](https://www.gopl.io/)*
+# Assignment Portfolio Hand-in
 
-## Usage
-Github templates doesn't support Git LFS out of the box, here's what you have to
-do to download the missing files:
-```sh
-git lfs fetch --all https://github.com/nymann/basic-latext-template master
-git lfs push --all origin master
-```
-This will fetch all the LFS files from the template repository and populate
-`.git/lfs/objects`, and then upload all those files to your repository.
+_A Component-based 2D Asteroids Game_
 
-## Used packages
-- fancyhdr
-- fontspec
-- geometry
-- graphicx
-- lipsum (only for generating filler text)
-- minted
-- titlesec
+### Hand-in Requirements
 
-## Preview
-![record](https://user-images.githubusercontent.com/7005867/117787126-72e50a80-b246-11eb-940a-776212d3f053.gif)
+You have to upload the following artifacts.
 
+##### Blackboard Assignment
 
-## Workflows
-
-I have a terminal window open with `ls report.tex chapters/*.tex | entr make`
-and `report.pdf` open in Zathura. This way when I make any changes to any of the
-TeX files the report is automatically recompiled thanks to `entr` and Zathura
-automatically refreshes the document.
-
-##### GNU Make
-| Command      | Description                               |
-| ---          | ---                                       |
-| `make`       | Compiles the `report.tex` file.           |
-| `make clean` | Cleans the directory for any build files. |
-
-
-##### Docker
-A simple `Dockerfile` is provided if you are in an environment with Docker but
-without TexLive. This is how you use it:
-
-```sh
-docker build -t my_report -f Dockerfile .
-docker run --detach=true --tty=true --name my_report_container my_report 
-docker cp my_report_container:/doc/report.pdf .
-```
+- One PDF report describing What you have done of work in your portfolio
+  [JavaLab](https://github.com/nymann/JavaLab),
+  [NetBeansLab1](https://github.com/nymann/NetBeansLab1),
+  [NetBeansLab2](https://github.com/nymann/NetBeansLab2),
+  [OSGiLab](https://github.com/nymann/OSGiLab),
+  [DesignLab](https://github.com/nymann/DesignLab),
+  [SpringLab](https://github.com/nymann/SpringLab)
+  and [TestLab](https://github.com/nymann/TestLab).
+- One zipped source code file for
+  [JavaLab](https://github.com/nymann/JavaLab),
+  [NetBeansLab1](https://github.com/nymann/NetBeansLab1),
+  [NetBeansLab2](https://github.com/nymann/NetBeansLab2),
+  [OSGiLab](https://github.com/nymann/OSGiLab),
+  [SpringLab](https://github.com/nymann/SpringLab)
+  and [TestLab](https://github.com/nymann/TestLab).
+- Demo videos of dynamic load/unload of
+  [NetBeansLab2](https://github.com/nymann/NetBeansLab2),
+  and [OSGiLab](https://github.com/nymann/OSGiLab).
+- Note, that you should not upload your update center as we get it through the videos.
+  If you have capacity problems uploadning to Itslearning assignments, then you are welcome to
+  share source code and videos via cloud services as long as the material is publicly accessible
