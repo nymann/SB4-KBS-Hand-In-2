@@ -1,0 +1,50 @@
+\section{OSGi Lab}
+\link{https://github.com/nymann/OSGiLab}
+
+\subsection{Running the game}
+\begin{minted}{sh}
+# Via make target
+make run
+
+# Via maven
+mvn clean install -DskipTests -f Asteroids/pom.xml
+mvn install pax:provision -f Asteroids/pom.xml
+\end{minted}
+
+\subsection{Annoyances}
+
+This lab, was the one so far I spend most time on debugging the black box nature
+of the entire system.
+
+\subsubsection{Missing dependency in generated project}
+
+I spend more time that I want to admit on a missing dependency in \texttt{Asteroids/provision/pom.xml}
+\begin{minted}{diff}
++ <dependencies>
++     <dependency>
++         <groupId>org.apache.felix</groupId>
++         <artifactId>org.apache.felix.scr</artifactId>
++         <version>1.8.0</version>
++     </dependency>
++ </dependencies>
+\end{minted}
+
+Without it everything would seemingly run fine, albeit without a Game Window.
+
+\subsubsection{Color Value fix}
+The third party libgdx library we were using had a breaking change in regards
+it's function \texttt{Color\.valueOf} which I was using to transform a hex color
+into a libgdx Color. In my previous labs I was using the format "#FFFFFF", but
+with the version I was using for OSGiLab this no longer worked and I had to
+delete the pre-pending pound symbol.
+I missed an opportunity to "show-off" my design in regards to this, since I had
+made an adapter class for the ShapeRenderer. I could've just updated my setColor
+method, instead of changing every caller.
+
+\inputminted{java}{code/color-value-fix.java}
+
+
+\subsection{Demo}
+The dynamic load-unload demo can be seen on
+\link{https://github.com/nymann/OSGiLab} or downloaded via:
+\link{https://github.com/nymann/OSGiLab/raw/master/demo/osgi-dynamic-load-unload.mp4}
