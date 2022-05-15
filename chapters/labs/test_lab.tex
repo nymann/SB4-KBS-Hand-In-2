@@ -1,0 +1,37 @@
+\section{Test Lab}
+\link{https://github.com/nymann/TestLab}
+
+In this lab I added tests for two components based on the JavaLab.
+
+\subsection{Enemy tests}
+\subsubsection{Utilising JUnit setUp}
+Instead of each test have to setup a new enemy, we can use JUnit\'s setup
+method.
+\inputminted{java}{code/test_lab/enemy/setup.java}
+The setUp method will run before each test, that way we get a fresh Enemy each
+time, without duplicating code.
+
+
+\subsubsection{Assert that enemy type is correct}
+\inputminted{java}{code/test_lab/enemy/entity_type.java}
+Here we are testing the entity type of the enemy, it should always be a ship.
+However in general it makes sense to also do a negative test.
+It's common to separate the two into multiple functions, the common reason being that you should only
+assert one thing.
+
+\subsubsection{Validate "Can Shoot" logic}
+The method \texttt{canShoot} does more than it name suggests. It check if the
+instance variable \texttt{cooldown} is less or equal to $0$ but it also deducts
+the \texttt{cooldown} by the methods \texttt{gameTime} argument.
+
+\inputminted{java}{code/test_lab/enemy/can_shoot.java}
+
+\subsubsection{Validate "Reset Cooldown" logic}
+The \texttt{resetCooldown} method sets the cooldown to $0.5f$. In other words an enemy can shoot every $0.5f$ game time.
+
+\inputminted{java}{code/test_lab/enemy/reset_cooldown.java}
+
+\subsection{LifeProcesser tests}
+The life processer is a post processing service, that removes entities which
+life is 0. It doesn't remove entities that does not have a \texttt{LifePart}.
+\inputminted{java}{code/test_lab/life_processer.java}
