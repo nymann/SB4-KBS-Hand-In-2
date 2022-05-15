@@ -1,0 +1,13 @@
+\section{Spring Lab}
+\link{https://github.com/nymann/SpringLab}
+
+\subsection{Running the game}
+\begin{minted}{sh}
+# Via make target
+make run
+
+# Via maven
+mvn install -f Asteroids/pom.xml
+mvn package -f Asteroids/Core/pom.xml
+java -jar bin/SpringLab.jar
+\end{minted}
