@@ -1,0 +1,33 @@
+\section{Java Lab}
+\link{https://github.com/nymann/JavaLab}
+
+See \ref{design-lab} for an analysis of dependencies and possible design
+changes.
+
+\subsection{Running the game}
+\begin{minted}{sh}
+# Via make target
+make run
+
+# Via maven
+mvn install -f AsteroidsEntityFramework/pom.xml
+mvn package -f AsteroidsEntityFramework/Core/pom.xml
+java -jar bin/JavaLab.jar
+\end{minted}
+
+\subsection{Uber jar} \label{java-lab:uberjar}
+I encountered a problem in this lab with building a "Uber jar" like I have done
+in the other labs, this was due to the newly introduced \texttt{META-INF}
+service files in this lab. In the effort of bundling everything together, the
+file names conflict for each service provider implementation, resulting in only
+one provider implementation for each type. If you were to unzip the jar file
+manually, and append an entry to the \texttt{IPostEntityProcessingServicel} file,
+everything would work again.
+
+The solution I ended up with to solve this automatically was to switch to
+\texttt{maven-shade-plugin} instead of the previously used
+\texttt{maven-assembly-plugin}.
+
+In the shade plugin, it is solved by adding a service resource transformer:
+\inputminted{xml}{code/maven-shade.xml}
+

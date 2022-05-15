@@ -2,9 +2,12 @@
 \documentclass[12pt,twoside]{report}
 \usepackage[a4paper,left=20mm,right=20mm,top=25mm,bottom=25mm,headheight=15pt]{geometry}
 \usepackage{graphicx}
-\usepackage{lipsum}
 \graphicspath{ {images/} }
 
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{link}{HTML}{0349B4}
+\newcommand{\link}[1]{{\color{link}\href{#1}{#1}}}
 
 % Font
 \usepackage{titlesec}
@@ -84,16 +87,8 @@
 \pagenumbering{arabic}
 
 \begin{document}
-    \input{chapters/titlepage.tex}
-    \newpage
-    
-    \input{chapters/table_of_contents}
-    \newpage
-    
-    \chapter{Part One}
-    \input{chapters/part_one.tex}
-
-    \appendix
-    \chapter{Appendix}
-    \input{chapters/appendix.tex}
+    \include{chapters/titlepage.tex}
+    \include{chapters/table_of_contents}
+    \include{chapters/introduction.tex}
+    \include{chapters/labs.tex}
 \end{document}

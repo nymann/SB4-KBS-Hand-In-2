@@ -1,0 +1,24 @@
+\section{Intro Lab}
+By visiting \link{https://github.com/nymann/IntroLab} you can see a gif demo of what
+the game looks like at this stage in the \texttt{README.md} file.
+
+See \ref{design-lab} for an analysis of dependencies and possible design
+changes.
+
+\subsection{Implemented features}
+\begin{enumerate}
+        \item Added Enemy ship that moves randomly and shoots bullets
+        \item Bullets will automatically be removed when outside the screen area.
+        \item Naive weapon cooldown\: (you can only shoot if there's less than $n$ bullets on screen)
+        \item Colored enemy ship, player ship and bullets.
+\end{enumerate}
+
+\subsection{Running the game}
+\begin{minted}{sh}
+# Via make target
+make run
+
+# Via maven
+mvn package -f AsteroidsLibGDX/pom.xml
+java -jar bin/AsteroidsLibGDX-1.0-SNAPSHOT.jar
+\end{minted}

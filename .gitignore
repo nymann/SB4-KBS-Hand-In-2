@@ -6,4 +6,5 @@ tags
 *.log
 *.out
 *.toc
+*.synctex.gz
 _minted-report/

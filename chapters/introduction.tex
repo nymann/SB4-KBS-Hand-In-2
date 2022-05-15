@@ -1,0 +1,21 @@
+\chapter{Introduction}
+\section{Readers guide}
+All my work related to this course is publicly available at
+\link{https://github.com/nymann/SB4-KBS}
+
+\subsection{Obtaining source code}
+\inputminted{sh}{code/obtaining-source.sh}
+
+\subsection{Managing build system dependency}
+Just like we in this course strive towards abstraction and utilising various
+techniques to manage our dependencies, I think it's important to abstract the build and
+running process as much as possible, to avoid being tied to an IDE (or even a
+specific build system (Maven in this case)). In order to do this \texttt{GNU
+Make} is utilised, so the developer can simply invoke \texttt{make run} to run the
+application and \texttt{make test} to run the test suite.
+
+The benefit of this is that if at a later point we want to use another build tool like Gradle or Ant,
+then we only need to change the Make targets. Furthermore it makes it easier to
+make generic continous integration pipelines (which I have implemented via
+GitHub Actions for almost all labs), since they can just call the make
+targets.

@@ -1,0 +1,23 @@
+\section{NetBeans Lab 1}
+\link{https://github.com/nymann/NetBeansLab1}
+
+In this lab we transitioned away from registering our service provider
+implementations via files in \texttt{resources/META-INF}. To instead use the
+ServiceProvider annotation:
+
+\inputminted{java}{code/openide-service-provider.java}
+
+This change of how to registering a service provider implementation alone is
+very welcome. It gives our language servers a fighting chance to see what's
+going on, and makes the code much more clear for new developers. On top of that
+we no longer need our service transformer described in \ref{java-lab:uberjar}
+
+\subsection{Running the game}
+\begin{minted}{sh}
+# Via make target
+make run
+
+# Via maven
+mvn install -DskipTests -f Asteroids/pom.xml
+mvn nbm:run-platform -f Asteroids/application/pom.xml
+\end{minted}

@@ -1,0 +1,34 @@
+\section{NetBeans Lab 2}
+\link{https://github.com/nymann/NetBeansLab2}
+
+\subsection{Running the game}
+\begin{minted}{sh}
+# The path to the updates.xml path in Bundle.properties is hard-coded.
+# You can fix it manually or:
+make fix-bundle-path
+# Via make target
+make run
+
+# Via maven
+mvn install -DskipTests -f Asteroids/pom.xml
+mvn nbm:run-platform -f Asteroids/application/pom.xml
+\end{minted}
+
+\subsection{Asteroids draw bug fix}
+\begin{minted}{diff}
+- float x = this.getShapeX()[0];
+- float y = this.getShapeY()[0];
+- float radius = this.getRadius();
+- sr.addCircle(x, y, radius);
++ PositionPart pos = this.getPart(PositionPart.class);
++ sr.addCircle(pos.getX(), pos.getY(), this.getRadius());
+\end{minted}
+Until this lab the collision detection didn't look quite right for asteroids.
+The reason being that Asteroids are being draw using the \texttt{addCircle}
+method, which expect ($x$, $y$) to be the center of the Asteroid, and not the top left.
+
+\subsection{Demo}
+The dynamic load-unload demo can be seen on
+\link{https://github.com/nymann/NetBeansLab2} or downloaded via:
+\link{https://github.com/nymann/NetBeansLab2/raw/master/demo/dynamic-load-unload.mp4}
+
