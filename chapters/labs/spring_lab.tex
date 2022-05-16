@@ -11,3 +11,20 @@ mvn install -f Asteroids/pom.xml
 mvn package -f Asteroids/Core/pom.xml
 java -jar bin/SpringLab.jar
 \end{minted}
+
+\section{Overview}
+In this lab I swapped out the use of \texttt{SPILocator} to use Spring Beans
+instead. However, I did not combine the use of NBM and Spring. So my solution is
+not that modular, since \texttt{Core} has to know what bean xml files exists.
+My first implementation was even less modular, fx to get the Plugins:
+
+\begin{minted}{diff}
+- Collection<IGamePluginService> plugins = new ArrayList<>();
+- plugins.add(appContext.getBean("AsteroidPlugin", AsteroidPlugin.class));
+- plugins.add(appContext.getBean("EnemyPlugin", EnemyPlugin.class));
+- plugins.add(appContext.getBean("PlayerPlugin", PlayerPlugin.class));
+- plugins.add(appContext.getBean("BulletPlugin", BulletPlugin.class));
+- return plugins;
++ return appContext.getBeansOfType(IGamePluginService.class).values();
+\end{minted}
+
