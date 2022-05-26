@@ -1,8 +1,7 @@
 \section{Spring Lab}
 \link{https://github.com/nymann/SpringLab}
 
-\subsection{Theory}
-\subsubsection{Registration}
+\subsection{Registration}
 In the Game class I setup an application context with hardcoded xml file names.
 \begin{minted}{java}
 private final ApplicationContext appContext =
@@ -42,7 +41,7 @@ to make available during run time.
 </beans>
 \end{minted}
 
-\subsubsection{Access}
+\subsection{Access}
 As in JavaLab we have the 3 methods getPluginServices,
 getEntityProcessingServices and getEntityPostProcessingServices which now uses
 the spring appContext to return all the beans of the corresponding interface
@@ -68,9 +67,8 @@ mvn package -f Asteroids/Core/pom.xml
 java -jar bin/SpringLab.jar
 \end{minted}
 
-\subsection{Overview}
-In this lab I swapped out the use of \texttt{SPILocator} to use Spring Beans
-instead. However, I did not combine the use of NBM and Spring. So my solution is
+\subsection{Modularity}
+I did not combine the use of NBM and Spring. So my solution is
 not that modular, since \texttt{Core} has to know what bean xml files exists.
 My first implementation was even less modular, fx to get the Plugins:
 
@@ -87,4 +85,3 @@ My first implementation was even less modular, fx to get the Plugins:
 A way to re-introduce modularity could also be to supply the xml filepaths as 
 parameters via the main method, then we could use constructor injection to supply
 the xml files at run time to the Game class.
-

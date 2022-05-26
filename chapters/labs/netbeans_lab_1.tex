@@ -14,8 +14,7 @@ going on, and makes the code much more clear for new developers. On top of that
 we no longer need our service transformer described in \ref{java-lab:uberjar}
 
 
-\subsection{Theory}
-\subsubsection{Registration}
+\subsection{Registration}
 We create a new class Installer.java inside the core module. This class inherits
 from Netbeans ModuleInstall class. ModuleInstall provides lifecycle hooks, which
 means that we can have code executed depending on the applications lifecycle,
@@ -53,7 +52,7 @@ public class BulletControlSystem
 }
 \end{minted}
 
-\subsubsection{Access}
+\subsection{Access}
 The methods inside the Game class in the Core module stayed roughly the same
 from JavaLab, however I took the lazy way out and didn't wrap 
 \begin{minted}{sh}

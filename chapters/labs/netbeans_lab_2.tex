@@ -2,11 +2,11 @@
 \section{NetBeans Lab 2}
 \link{https://github.com/nymann/NetBeansLab2}
 
-\subsection{Theory}
-\subsubsection{Registration}
+\subsection{Registration}
+Works the same way as in NetBeans Lab 1.
 
-\subsubsection{Access}
-The access works the same as in NetBeans Lab 1, however to show that the dynamic
+\subsection{Access}
+The access works the same way as in NetBeans Lab 1, however to show that the dynamic
 loading works at runtime I now constantly update post entity processing
 services, instead of only getting them once during initialisation.
 This comes at a performance hit, since update is called on every new frame.
@@ -16,7 +16,7 @@ This comes at a performance hit, since update is called on every new frame.
 + for (...: getPostEntityProcessingServices()) {
 \end{minted}
 
-\subsubsection{Silent Update}
+\subsection{Silent Update}
 We have previously seen in NetBeansLabs 1 how we make Netbeans aware of our Core
 module, we do the same thing for SilentUpdate:
 

@@ -7,12 +7,11 @@
 See \ref{design-lab} for an analysis of dependencies and possible design
 changes.
 
-\subsection{Theory}
 In this lab java.util.ServiceLoader was used to dynamically register our
 service providers. However instead of using the load method from the
 ServiceLoader directly inside the Game class, we instead wrap it inside the SPILocator class.
 
-\subsubsection{SPILocator}
+\subsection{SPILocator}
 The reason for wrapping ServiceLoader is two-fold, we manage our dependency, making our code more
 flexible and thereby easier to change, because if we want to change the
 underlying lookup implementation we only have to change code one place (assuming
@@ -47,7 +46,7 @@ for loop. This is possible because ServiceLoader implements Iterable.
 We simply add each service provider found by the loader to an arraylist and
 return it.
 
-\subsubsection{ServiceLoader}
+\subsection{ServiceLoader}
 In the previous section we have seen that the actual loading of service
 providers is done by java.util.ServiceLoader via it's load method.
 It knows about the existence of service providers via provider-configuration
@@ -57,7 +56,7 @@ should be the fully-qualified binary name of one or more service providers
 (implementations) of this service type separated by the newline character.
 
 
-\subsubsection{Access}
+\subsection{Access}
 To get access to the service providers at runtime we call the locateAll method
 on the SPILocator class, since it's static we don't need an instance of it.
 Inside Game.java in the Core module we have getPluginServices,
