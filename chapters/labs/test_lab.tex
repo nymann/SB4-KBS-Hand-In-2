@@ -6,10 +6,10 @@ In this lab I added tests for two components based on the JavaLab.
 
 \subsection{The reason for automated tests}
 \begin{itemize}
-        \item Without automated tests, how do you ensure you haven\'t broken
+        \item Without automated tests, how do you ensure you haven't broken
                 anything when implementing new features?
         \item Without automated tests, how can you safely refactor knowing that you have only
-                rearranged the code and not altered it\'s behaviour?
+                rearranged the code and not altered it's behaviour?
         \item Without automated tests, how can you keep velocity when at the
                 same time having to proof to the client that your acceptance
                 tests still passes manually?
@@ -38,7 +38,7 @@ programming as a job pleasent.
 
 \subsection{Enemy tests}
 \subsubsection{Utilising JUnit setUp}
-Instead of each test have to setup a new enemy, we can use JUnit\'s setup
+Instead of each test have to setup a new enemy, we can use JUnit's setup
 method.
 \inputminted{java}{code/test_lab/enemy/setup.java}
 The setUp method will run before each test, that way we get a fresh Enemy each
