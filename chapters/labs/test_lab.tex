@@ -1,7 +1,40 @@
+% Feedback in general, why do we test? 
 \section{Test Lab}
 \link{https://github.com/nymann/TestLab}
 
 In this lab I added tests for two components based on the JavaLab.
+
+\subsection{The reason for automated tests}
+\begin{itemize}
+        \item Without automated tests, how do you ensure you haven\'t broken
+                anything when implementing new features?
+        \item Without automated tests, how can you safely refactor knowing that you have only
+                rearranged the code and not altered it\'s behaviour?
+        \item Without automated tests, how can you keep velocity when at the
+                same time having to proof to the client that your acceptance
+                tests still passes manually?
+\end{itemize}
+I think it's fitting to quote Kent Beck \cite{kent-beck-xp-history} here since he was one of the founders of
+JUnit which is the test framework we are using.
+
+\epigraph{So my experience with programming methodologies started the first day of classes as a computer
+science student at the University of Oregon.
+The head of the department in the very first class stood up, and gave a
+lecture about structured top-down programming, where programmers of the
+future will will take a concise precise definition of the problem, and break it
+down into code in in such great detail and discipline, that in the in the career
+of a programmer of the future you might be able to point to four or five errors
+that you made ever. I walked out of that lecture aghast, I'm here, I'm 18
+years old I've been programming for probably six, or eight years at that
+point, and I just thought oh this cannot be the future, this doesn't sound like
+any fun. I'm going to change the way that
+people do that...}{\textit{Kent Beck \\ Extreme Programming 20 years later
+}}
+
+As someone who usually practices TDD at work (thanks Kent) I couldn't agree
+more. Being able to feel confident in your code due to automated tests, makes
+programming as a job pleasent.
+
 
 \subsection{Enemy tests}
 \subsubsection{Utilising JUnit setUp}
@@ -20,9 +53,14 @@ It's common to separate the two into multiple functions, the common reason being
 assert one thing.
 
 \subsubsection{Validate "Can Shoot" logic}
+% Feedback: if your test does anything else than the name suggest, the name should be different.
+%
+% Seemingly the reviewer misunderstood this section, so let's make it more clear
 The method \texttt{canShoot} does more than it name suggests. It check if the
 instance variable \texttt{cooldown} is less or equal to $0$ but it also deducts
-the \texttt{cooldown} by the methods \texttt{gameTime} argument.
+the \texttt{cooldown} by the methods \texttt{gameTime} argument. It should
+probably have been renamed to \texttt{canShootAndTickCooldown} which would also
+make the underlying issue of the method clear.
 
 \inputminted{java}{code/test_lab/enemy/can_shoot.java}
 
