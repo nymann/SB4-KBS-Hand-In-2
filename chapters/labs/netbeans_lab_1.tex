@@ -31,6 +31,28 @@ Manifest-Version: 1.0
 OpenIDE-Module-Install: dk/sdu/mmmi/cbse/main/Installer.class
 \end{minted}
 
+In order for the service providers to be registered by the Netbeans module
+system we annotate each service provider class with a certain notation:
+\begin{minted}{java}
+@ServiceProvider(service = IGamePluginService.class)
+public class AsteroidPlugin implements IGamePluginService {
+  ...
+}
+\end{minted}
+
+If a service provider implements multiple services, we can annotate it like:
+
+\begin{minted}{java}
+@ServiceProviders(value = {
+  @ServiceProvider(service = IEntityProcessingService.class),
+  @ServiceProvider(service = IBulletBehaviour.class)
+})
+public class BulletControlSystem
+  implements IEntityProcessingService, IBulletBehaviour {
+  ...
+}
+\end{minted}
+
 \subsubsection{Access}
 The methods inside the Game class in the Core module stayed roughly the same
 from JavaLab, however I took the lazy way out and didn't wrap 
