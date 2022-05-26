@@ -1,5 +1,61 @@
+% Feedback: you should also describe how you access the components using the Lookup. 
 \section{NetBeans Lab 2}
 \link{https://github.com/nymann/NetBeansLab2}
+
+\subsection{Theory}
+\subsubsection{Registration}
+
+\subsubsection{Access}
+The access works the same as in NetBeans Lab 1, however to show that the dynamic
+loading works at runtime I now constantly update post entity processing
+services, instead of only getting them once during initialisation.
+This comes at a performance hit, since update is called on every new frame.
+
+\begin{minted}{diff}
+- for (...: postEntityProcessingServices) {
++ for (...: getPostEntityProcessingServices()) {
+\end{minted}
+
+\subsubsection{Silent Update}
+We have previously seen in NetBeansLabs 1 how we make Netbeans aware of our Core
+module, we do the same thing for SilentUpdate:
+
+\begin{minted}{mf}
+Manifest-Version: 1.0
+OpenIDE-Module-Localizing-Bundle: omitted/Bundle.properties
+OpenIDE-Module-Install: omitted/silentupdate/UpdateActivator.class
+OpenIDE-Module-Layer: omitted/autoupdate/silentupdate/resources/layer.xml
+\end{minted}
+Note \texttt{org/netbeans/modules/autoupdate} is shortened to omitted
+
+Our UpdateActivator class overrides the restored method just like our Core
+Installer does.
+I made fields for the various parameters it takes:
+\begin{minted}{java}
+...
+private static final int startupDelay = 0;
+private static final int timeBetweenRun = 2;
+...
+@Override
+public void restored() {
+  executorService.scheduleAtFixedRate(
+    UpdateHandler::checkAndHandleUpdates,
+    startupDelay,
+    timeBetweenRun,
+    TimeUnit.SECONDS
+  );
+}
+...
+\end{minted}
+
+Here the executorService is a threadPoolService with a core pool size of 1.
+So in the end what we get is a thread that's running on startup (delay 0) and
+then waits 2 seconds between each successful execution of the check and handle
+updates static method.
+That method is responsible for handling updates, here updates is refering to
+newly installed modules, removed modules and updates to existing modules. The
+internal implementation relies on the netebans auto update api and specifically
+the UpdateUnit class \cite{netbeans-update-unit}.
 
 \subsection{Running the game}
 \begin{minted}{sh}

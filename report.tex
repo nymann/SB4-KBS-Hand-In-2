@@ -2,6 +2,10 @@
 \documentclass[12pt,twoside]{report}
 \usepackage[a4paper,left=20mm,right=20mm,top=25mm,bottom=25mm,headheight=15pt]{geometry}
 \usepackage{graphicx}
+% Bibliography setup
+\usepackage[backend=biber]{biblatex}
+\addbibresource{bibliography.bib}
+
 \graphicspath{ {images/} }
 
 \usepackage{hyperref}
@@ -91,4 +95,5 @@
     \include{chapters/table_of_contents}
     \include{chapters/introduction.tex}
     \include{chapters/labs.tex}
+    \include{chapters/references.tex}
 \end{document}

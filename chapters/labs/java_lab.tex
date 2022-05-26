@@ -1,8 +1,72 @@
+% Feedback
+% In the JavaLab you should also describe how the SPILocator is used.
+
 \section{Java Lab}
 \link{https://github.com/nymann/JavaLab}
 
 See \ref{design-lab} for an analysis of dependencies and possible design
 changes.
+
+\subsection{Theory}
+In this lab java.util.ServiceLoader was used to dynamically register our
+service providers. However instead of using the load method from the
+ServiceLoader directly inside the Game class, we instead wrap it inside the SPILocator class.
+
+\subsubsection{SPILocator}
+The reason for wrapping ServiceLoader is two-fold, we manage our dependency, making our code more
+flexible and thereby easier to change, because if we want to change the
+underlying lookup implementation we only have to change code one place (assuming
+that our method signature doesn't change), and we also get the benefit of caching,
+by storing instances of ServiceLoader to a associative array (HashMap).
+
+Inside SPILocator we have the locateAll method that takes in the parameter service of
+a given type and returns a list of the same type.
+
+With that being said let's take a look at the locateAll method.
+
+\begin{minted}{java}
+...
+ServiceLoader<T> loader = loaderMap.get(service);
+
+if (loader == null) {
+        loader = ServiceLoader.load(service);
+        loaderMap.put(service, loader);
+}
+...
+\end{minted}
+
+We first check if we already have an instance of the ServiceLoader, if
+we don't, instantiate a new service loader for that service type by calling
+ServiceLoader.load(service) and put in inside our associate array.
+By doing this instead of just using ServiceLoader.load(service) each time, we
+speed up future calls to the locateAll method that has a service type we have
+already seen once, since retrieving a value from a key in a HashMap is $O(1)$.
+
+Now that we have an instance of a ServiceLoader, we can iterate over it using a
+for loop. This is possible because ServiceLoader implements Iterable.
+We simply add each service provider found by the loader to an arraylist and
+return it.
+
+\subsubsection{ServiceLoader}
+In the previous section we have seen that the actual loading of service
+providers is done by java.util.ServiceLoader via it's load method.
+It knows about the existence of service providers via provider-configuration
+files inside each service providers \texttt{META-INF/services} directory.
+From the documentation \cite{oracle-service-loader} we can see that the name of each file should be the fully-qualified binary name of the service type (the interface it implements). The content of the file
+should be the fully-qualified binary name of one or more service providers
+(implementations) of this service type separated by the newline character.
+
+
+\subsubsection{Access}
+To get access to the service providers at runtime we call the locateAll method
+on the SPILocator class, since it's static we don't need an instance of it.
+Inside Game.java in the Core module we have getPluginServices,
+getEntityProcessingServices, and getPostEntityProcessingServices.
+The each just call locateAll with the matching interface.
+
+\begin{minted}{java}
+SPILocator.locateAll(IGamePluginService.class)
+\end{minted}
 
 \subsection{Running the game}
 \begin{minted}{sh}

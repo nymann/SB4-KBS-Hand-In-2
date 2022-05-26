@@ -8,3 +8,7 @@ tags
 *.toc
 *.synctex.gz
 _minted-report/
+*.bbl
+*.bcf
+*.blg
+*.run.xml

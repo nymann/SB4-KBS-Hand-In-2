@@ -1,3 +1,4 @@
+% Feeback: you should also describe how you access the components using the Lookup. 
 \section{NetBeans Lab 1}
 \link{https://github.com/nymann/NetBeansLab1}
 
@@ -11,6 +12,34 @@ This change of how to registering a service provider implementation alone is
 very welcome. It gives our language servers a fighting chance to see what's
 going on, and makes the code much more clear for new developers. On top of that
 we no longer need our service transformer described in \ref{java-lab:uberjar}
+
+
+\subsection{Theory}
+\subsubsection{Registration}
+We create a new class Installer.java inside the core module. This class inherits
+from Netbeans ModuleInstall class. ModuleInstall provides lifecycle hooks, which
+means that we can have code executed depending on the applications lifecycle,
+fx. in order to have code called when the app is about to exit we can override
+ModuleInstall.closing(). We are interested in having our game launch on startup,
+so we override ModuleInstall.restored() which according to the documentation
+\cite{netbeans-module-install} is called during startup.
+In order for the Netbeans Module System to know about our Installer class, we
+define it in the Core modules manifest.
+
+\begin{minted}{mf}
+Manifest-Version: 1.0
+OpenIDE-Module-Install: dk/sdu/mmmi/cbse/main/Installer.class
+\end{minted}
+
+\subsubsection{Access}
+The methods inside the Game class in the Core module stayed roughly the same
+from JavaLab, however I took the lazy way out and didn't wrap 
+\begin{minted}{sh}
+import org.openide.util.Lookup;
+\end{minted}
+I could have just changed the existing SPILocator to use openide instead, that way
+I would not have to change code 3 places in the Game class.
+
 
 \subsection{Running the game}
 \begin{minted}{sh}
