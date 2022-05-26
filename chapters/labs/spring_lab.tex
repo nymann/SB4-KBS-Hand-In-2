@@ -1,6 +1,62 @@
 \section{Spring Lab}
 \link{https://github.com/nymann/SpringLab}
 
+\subsection{Theory}
+\subsubsection{Registration}
+In the Game class I setup an application context with hardcoded xml file names.
+\begin{minted}{java}
+private final ApplicationContext appContext =
+  new ClassPathXmlApplicationContext(
+    "Asteroid.xml",
+    "AsteroidSplitter.xml", 
+    "Enemy.xml",
+    "Player.xml",
+    "LifeProcesser.xml",
+    "CollisionDetection.xml",
+    "Bullet.xml"
+  );
+\end{minted}
+
+The location of each xml file is located in the ressources/META-INF directory
+inside the corresponding module for the file (eg. the Asteroid module for
+Asteroid.xml).
+
+The content of the beans xml file should just be a bean for each class you want
+to make available during run time.
+
+\begin{minted}{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean 
+      id="AsteroidPlugin"
+      class="dk.sdu.mmmi.cbse.asteroidsystem.AsteroidPlugin"
+    />
+    <bean
+      id="AsteroidControlSystem"
+      class="dk.sdu.mmmi.cbse.asteroidsystem.AsteroidControlSystem"
+    />
+</beans>
+\end{minted}
+
+\subsubsection{Access}
+As in JavaLab we have the 3 methods getPluginServices,
+getEntityProcessingServices and getEntityPostProcessingServices which now uses
+the spring appContext to return all the beans of the corresponding interface
+class type.
+
+\begin{minted}{java}
+...
+private Collection<? extends IGamePluginService> getPluginServices() {
+  return appContext.getBeansOfType(IGamePluginService.class).values();
+}
+...
+\end{minted}
+
+
 \subsection{Running the game}
 \begin{minted}{sh}
 # Via make target
@@ -12,7 +68,7 @@ mvn package -f Asteroids/Core/pom.xml
 java -jar bin/SpringLab.jar
 \end{minted}
 
-\section{Overview}
+\subsection{Overview}
 In this lab I swapped out the use of \texttt{SPILocator} to use Spring Beans
 instead. However, I did not combine the use of NBM and Spring. So my solution is
 not that modular, since \texttt{Core} has to know what bean xml files exists.
@@ -27,4 +83,8 @@ My first implementation was even less modular, fx to get the Plugins:
 - return plugins;
 + return appContext.getBeansOfType(IGamePluginService.class).values();
 \end{minted}
+
+A way to re-introduce modularity could also be to supply the xml filepaths as 
+parameters via the main method, then we could use constructor injection to supply
+the xml files at run time to the Game class.
 
