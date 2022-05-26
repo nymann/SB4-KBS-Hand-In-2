@@ -6,13 +6,189 @@
 % 
 \link{https://github.com/nymann/OSGiLab}
 
-\subsection{Bundle Context}
-\subsubsection{Registration}
-\subsubsection{Access}
+In the lab we were supposed to use both the bundle context API and delclarative
+services. Despite what method you choose, you still have to create a manifest
+file for each module that contains the symbolic name of the bundle, which should
+be unique since it's used as an identifier.
 
-\subsection{Declarative services}
-\subsubsection{Registration}
-\subsubsection{Access}
+\begin{minted}{mf}
+Bundle-SymbolicName: AsteroidSplitter
+\end{minted}
+
+\subsection{Registration}
+\subsubsection{Bundle Context}
+I implemented the asteroid splitter via the OSGi frameworks' bundle context.
+In order to register the service provider we create a class that implements the
+BundleActivator interface. From the documentation
+\cite{osgi-bundle-activator} we can see that the start method is called when the
+bundle is started. We use this to register our asteroid splitting service, the
+first parameter \texttt{clazz} is the name of which the service can be found,
+it's important that we use the interface name here. By
+parsing a new instance of it as the second parameter, and let the third one be
+null. The optional third parameter can be used for properties.
+
+In order to make the OSGi framework aware of our Activator, we can write it in
+the \texttt{osgi.bnd} file in the module root directory.
+
+\begin{minted}{mf}
+Bundle-Activator: 
+  dk.sdu.mmmi.cbse.asteroidsplittingsystem.AsteroidSplitterActivator
+\end{minted}
+
+\subsubsection{Declarative Service}
+One of the advantages of declarative services is the reduction of boilerplate
+code \cite{ibm-osgi-demystified}, since we no longer need an activator class.
+
+Instead of the registration being inside a java class, everything is instead
+done via XML.
+
+Let's take a look at the player control system, which also contains a reference.
+
+\begin{minted}[fontsize=\small]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"
+  name="dk.sdu.mmmi.cbse.playersystem">
+  <implementation class="dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem"/>
+  <service>
+    <provide interface="dk.sdu.mmmi.cbse.common.services.IEntityProcessingService"/>
+  </service>
+  <reference
+    bind="setBulletService"
+    cardinality="0..1"
+    interface="dk.sdu.mmmi.cbse.common.bullet.IBulletBehaviour"
+    name="BulletService"
+    policy="dynamic"
+    unbind="removeBulletService"
+  />
+</scr:component>
+\end{minted}
+
+The new thing here is the service tag where we specify which interface thie
+service implements (provides).
+
+In order for OSGi to be aware of our xml file, we specify the following in our
+\texttt{osgi.bnd} file:
+
+\begin{minted}{mf}
+Bundle-SymbolicName: Player
+Bundle-ActivationPolicy: lazy
+Service-Component: META-INF/processor.xml, META-INF/plugin.xml
+\end{minted}
+
+By setting the activation policy to lazy, OSGi will instantiate it just in time
+(before it's being called). This means that the game can do the
+initial launch without it essentially.
+
+\subsection{Referencing other services}
+In order for other modules use the asteroid splitting service in the asteroids module we can
+create an xml file \texttt{asteroidprocessor.xml} inside the resources/META-INF directory:
+
+\begin{minted}[fontsize=\small]{xml}
+<scr:component
+  xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"
+  name="dk.sdu.mmmi.cbse.asteroidsystem.AsteroidProcessor">
+  <implementation class="dk.sdu.mmmi.cbse.asteroidsystem.AsteroidProcessor"/>
+  <service>
+    <provide 
+    interface="dk.sdu.mmmi.cbse.common.services.IEntityProcessingService"/>
+  </service>
+  <reference 
+    bind="setAsteroidSplitterService" cardinality="0..1"
+    interface="dk.sdu.mmmi.cbse.common.asteroid.IAsteroidSplitter"
+    name="AsteroidSplitterService"
+    policy="dynamic"
+    unbind="removeAsteroidSplitterService"
+  />
+</scr:component>
+\end{minted}
+
+Note the reference here, we furthermore specify method names for the bind and
+unbind methods. Which we need to implement inside the implementation class
+\begin{minted}{java}
+...
+public void setAsteroidSplitterService(
+  IAsteroidSplitter asteroidSplitter
+) {
+  this.asteroidSplitter = asteroidSplitter;
+}
+
+public void removeAsteroidSplitterService(
+  IAsteroidSplitter asteroidSplitter
+) {
+  this.asteroidSplitter = null;
+}
+...
+\end{minted}
+
+By specifying a cardinality of 0 to 1, we are essentially saying that it's
+optional, since the application can be started without any asteroid splitter
+service bound. If we wanted to require it but only allow one we would simply
+specify the cardinality to 1 to 1.
+
+Furthermore when we specify scr:component, we could've also specified more than
+just the name, by supplying; activate, deactivate and/or modified, these three
+parameters, take the name of a callback function inside the implementation
+class. They each might be interesting if we want to be
+notified by the OSGi framework when the lifecycle of this component changes
+\cite{ibm-osgi-demystified}.
+
+\subsection{Loading entity services and plugins}
+In order to do something with all the IGamePlugins, IEntityProcessingServices
+and IEntityPostProcessingServices, we need a way to load them inside our Game
+class in the Core module.
+The method is the same for all three except for the interface type, so I'll show
+IEntityProcessingServices as an example.
+
+Inside our META-INF directory in the Core module we specify \texttt{Core.xml}
+
+\begin{minted}{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"
+  name="dk.sdu.mmmi.cbse.Game">
+  <implementation class="dk.sdu.mmmi.cbse.Game"/>
+  ...
+  <reference
+    bind="addEntityProcessingService"
+    cardinality="0..n"
+    interface="dk.sdu.mmmi.cbse.common.services.IEntityProcessingService"
+    name="IEntityProcessingService"
+    policy="dynamic"
+    unbind="removeEntityProcessingService"
+  />
+  ...
+</scr:component>
+\end{minted}
+
+As we can see, it's the same way as we would reference any other service. We
+specify a cardinality of 0 to n, since we want to support 0 or more processing
+entity services. Furthermore we define the name of the bind and unbind methods, which we
+implement in the Game class.
+
+\begin{minted}{java}
+private final List<IEntityProcessingService> entityProcessorList;
+...
+public Game() {
+  entityProcessorList = new CopyOnWriteArrayList();
+  ...
+}
+...
+
+public void addEntityProcessingService(
+  IEntityProcessingService eps
+) {
+  entityProcessorList.add(eps);
+}
+
+public void removeEntityProcessingService(
+  IEntityProcessingService eps
+) {
+  entityProcessorList.remove(eps);
+}
+\end{minted}
+
+We use a copy on write array list for it's thread safety
+\cite{java-copy-on-write}, in our case it makes a fresh copy each time we call
+add or remove on it.
 
 \subsection{Running the game}
 \begin{minted}{sh}
@@ -26,7 +202,7 @@ mvn install pax:provision -f Asteroids/pom.xml
 
 \subsection{Color Value fix}
 The third party libgdx library we were using had a breaking change in regards
-it's function \texttt{Color\.valueOf} which I was using to transform a hex color
+it's function \texttt{Color.valueOf} which I was using to transform a hex color
 into a libgdx Color. In my previous labs I was using the format "\#FFFFFF", but
 with the version I was using for OSGiLab this no longer worked and I had to
 delete the pre-pending pound symbol.
