@@ -1,5 +1,18 @@
 \section{OSGi Lab}
+% you have not explained anything of what was asked.
+% Which is:
+% - BundleContext, registration and access
+% - Declarative services, registration and access-
+% 
 \link{https://github.com/nymann/OSGiLab}
+
+\subsection{Bundle Context}
+\subsubsection{Registration}
+\subsubsection{Access}
+
+\subsection{Declarative services}
+\subsubsection{Registration}
+\subsubsection{Access}
 
 \subsection{Running the game}
 \begin{minted}{sh}
@@ -11,27 +24,7 @@ mvn clean install -DskipTests -f Asteroids/pom.xml
 mvn install pax:provision -f Asteroids/pom.xml
 \end{minted}
 
-\subsection{Annoyances}
-
-This lab, was the one so far I spend most time on debugging the black box nature
-of the entire system.
-
-\subsubsection{Missing dependency in generated project}
-
-I spend more time that I want to admit on a missing dependency in \texttt{Asteroids/provision/pom.xml}
-\begin{minted}{diff}
-+ <dependencies>
-+     <dependency>
-+         <groupId>org.apache.felix</groupId>
-+         <artifactId>org.apache.felix.scr</artifactId>
-+         <version>1.8.0</version>
-+     </dependency>
-+ </dependencies>
-\end{minted}
-
-Without it everything would seemingly run fine, albeit without a Game Window.
-
-\subsubsection{Color Value fix}
+\subsection{Color Value fix}
 The third party libgdx library we were using had a breaking change in regards
 it's function \texttt{Color\.valueOf} which I was using to transform a hex color
 into a libgdx Color. In my previous labs I was using the format "\#FFFFFF", but
